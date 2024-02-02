@@ -220,9 +220,15 @@ releasing of a package.
 `semantic-release` comes with support for the following plugins
 (they must be specified in your release configuration file for them to work):
 
--   `@semantic-release/exec` - Run commands during the release process
+-   `@semantic-release/commit-analyzer` - Analyze commits with conventional-changelog (included by default)
+-   `@semantic-release/release-notes-generator` - Generate release notes for the commits in the release (included by
+    default)
+-   `@semantic-release/npm` - Publish a package to npm (included by default)
+-   `@semantic-release/github` - Create a GitHub release + comment on issues and PRs (included by default)
+
 -   `@semantic-release/git` - Commit release assets to the repository
--   `@semantic-release/github` - Create a GitHub release
+-   `@semantic-release/exec` - Run commands during the release process
+-   `@semantic-release/changelog` - Generate a changelog file
 -   `semantic-release-gitmoji` - Use gitmoji for commit messages
 -   `semantic-release-major-tag` - Create a major tag for releases
 
