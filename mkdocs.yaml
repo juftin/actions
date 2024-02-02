@@ -1,0 +1,46 @@
+site_name: actions
+nav:
+    - Home 🏠: index.md
+theme:
+    favicon: https://juftin.com/favicon.ico
+    logo: https://raw.githubusercontent.com/juftin/juftin/main/static/juftin.png
+    name: material
+    features:
+        - navigation.tracking
+        - content.code.annotate
+        - content.code.copy
+    palette:
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          accent: purple
+          toggle:
+              icon: material/weather-sunny
+              name: Switch to dark mode
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          primary: black
+          toggle:
+              icon: material/weather-night
+              name: Switch to light mode
+repo_url: https://github.com/juftin/actions
+repo_name: actions
+edit_uri: blob/main/.docs/
+site_author: juftin
+extra:
+    generator: false
+exclude_docs: |
+    gen_pages.py
+markdown_extensions:
+    - toc:
+          permalink: "#"
+    - md_in_html
+    - pymdownx.highlight:
+          anchor_linenums: true
+    - pymdownx.superfences
+    - markdown.extensions.attr_list
+    - pymdownx.keys
+docs_dir: .docs
+plugins:
+    - gen-files:
+          scripts:
+              - .docs/gen_pages.py
