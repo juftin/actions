@@ -1,0 +1,42 @@
+name: Tests
+
+on:
+    push:
+        branches:
+            - main
+            - next
+            - beta
+            - alpha
+            - "*.x"
+    pull_request:
+        branches: ["**"]
+    schedule:
+        - cron: 0 12 1 * *
+jobs:
+    test-suite:
+        strategy:
+            fail-fast: true
+            matrix:
+                include:
+                    - { name: Python 3.12, python: "3.12" }
+                    - { name: Python 3.11, python: "3.11" }
+                    - { name: Python 3.10, python: "3.10" }
+                    - { name: Python 3.9, python: "3.9" }
+                    - { name: Python 3.8, python: "3.8" }
+        runs-on: ubuntu-latest
+        concurrency:
+            group: ${{ github.workflow }}-${{ matrix.name }}-${{ github.ref }}
+            cancel-in-progress: true
+        steps:
+            - name: Set up Github Workspace
+              uses: actions/checkout@v4
+            - name: Setup Hatch
+              uses: ./hatch-setup
+              with:
+                  python_version: "3.11"
+            - name: Test
+              uses: ./hatch-test
+              with:
+                  env: matrix
+                  coverage_command: cov
+                  matrix: "+py=${{ matrix.python }}"

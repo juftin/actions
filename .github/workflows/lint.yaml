@@ -1,0 +1,21 @@
+name: Lint
+
+on:
+    pull_request:
+        branches: ["**"]
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        concurrency:
+            group: ${{ github.workflow }}-${{ github.job }}-${{ github.ref }}
+            cancel-in-progress: true
+        steps:
+            - name: Set up Github Workspace
+              uses: actions/checkout@v4
+            - name: Setup Hatch
+              uses: ./hatch-setup
+              with:
+                  python_version: "3.11"
+            - name: Lint
+              uses: ./hatch-lint

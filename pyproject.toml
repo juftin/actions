@@ -1,0 +1,29 @@
+[project]
+name = "actions"
+version = "0.0.0"
+
+[tool.hatch.env]
+requires = ["hatch-mkdocs"]
+
+[tool.hatch.env.collectors.mkdocs.docs]
+path = "mkdocs.yaml"
+
+[tool.hatch.envs.lint]
+detached = true
+skip-install = true
+
+[tool.hatch.envs.lint.scripts]
+style = "python -c 'print(1)'"
+typing = "python -c 'print(2)'"
+
+[tool.hatch.envs.matrix]
+template = "test"
+
+[[tool.hatch.envs.matrix.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.test]
+detached = true
+
+[tool.hatch.envs.test.scripts]
+cov = "python -c 'print(3)'"
