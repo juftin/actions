@@ -1,0 +1,31 @@
+name: semantic-release
+description: GitHub Release using semantic-release + gitmoji
+
+inputs:
+    github_token:
+        description: GitHub Personal Access Token
+        required: true
+
+runs:
+    using: composite
+    steps:
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+              node-version: "lts/*"
+        - name: Install dependencies
+          run: npm --prefix ${{ github.action_path }}/semantic_release/ clean-install
+          shell: bash
+        - name: Verify NPM Signatures
+          run: npm --prefix ${{ github.action_path }}/semantic_release/ audit signatures
+          shell: bash
+        - name: Release
+          shell: bash
+          run: |
+              npx --prefix ${{ github.action_path }}/semantic_release/ semantic-release
+          env:
+              GITHUB_TOKEN: ${{ inputs.github_token }}
+              GIT_AUTHOR_NAME: github-actions[bot]
+              GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+              GIT_COMMITTER_NAME: github-actions[bot]
+              GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
