@@ -1,0 +1,26 @@
+name: github-pages
+description: github-pages publishing
+
+inputs:
+    path:
+        description: "The directory to publish"
+        required: true
+        default: "site"
+
+runs:
+    using: composite
+    steps:
+        - name: Setup GitHub Pages
+          uses: actions/configure-pages@v4
+        - name: Upload Artifact
+          uses: actions/upload-pages-artifact@v3
+          with:
+              path: ${{ inputs.path }}
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4
+
+outputs:
+    page_url:
+        description: "URL from the deployment step"
+        value: ${{ steps.deployment.outputs.page_url }}
