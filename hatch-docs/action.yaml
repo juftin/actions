@@ -1,0 +1,29 @@
+name: hatch-docs
+description: building documentation with Hatch
+
+inputs:
+    path:
+        description: "The directory to publish"
+        required: true
+        default: "site"
+    env:
+        description: Hatch docs environment
+        default: docs
+        required: false
+    build_command:
+        description: docs build command to run
+        default: build
+        required: false
+    shell:
+        description: Shell to use
+        default: bash
+        required: false
+runs:
+    using: composite
+    steps:
+        - name: Create Virtual Environment
+          run: hatch env create ${{ inputs.env }}
+          shell: ${{ inputs.shell }}
+        - name: Build Site
+          run: hatch run ${{ inputs.env }}:${{ inputs.build_command }}
+          shell: ${{ inputs.shell }}
