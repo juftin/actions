@@ -1,0 +1,27 @@
+name: hatch-pypi
+description: Publish to PyPi
+
+inputs:
+    shell:
+        description: Shell to use
+        default: bash
+        required: false
+    user:
+        description: PyPI Username
+        required: false
+        default: __token__
+    password:
+        description: PyPI Password
+        required: true
+
+runs:
+    using: composite
+    steps:
+        - name: Build Package
+          run: hatch build
+          shell: ${{ inputs.shell }}
+        - name: Publish package on PyPI
+          uses: pypa/gh-action-pypi-publish@v1.8.11
+          with:
+              user: ${{ inputs.user }}
+              password: ${{ inputs.password }}
