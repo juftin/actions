@@ -217,12 +217,14 @@ The `semantic-release` action is a composite action
 that uses [semantic-release] to automate the versioning and
 releasing of a package.
 
-`semantic-release` comes pre-configured with the following plugins:
+`semantic-release` comes with support for the following plugins
+(they must be specified in your release configuration file for them to work):
 
 -   `@semantic-release/exec` - Run commands during the release process
 -   `@semantic-release/git` - Commit release assets to the repository
 -   `@semantic-release/github` - Create a GitHub release
 -   `semantic-release-gitmoji` - Use gitmoji for commit messages
+-   `semantic-release-major-tag` - Create a major tag for releases
 
 You must also have a semantic-release configuration file in your repository
 root for this action to work.

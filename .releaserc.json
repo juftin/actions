@@ -17,6 +17,7 @@
     "plugins": [
         "semantic-release-gitmoji",
         "@semantic-release/git",
-        "@semantic-release/github"
+        "@semantic-release/github",
+        "semantic-release-major-tag"
     ]
 }
