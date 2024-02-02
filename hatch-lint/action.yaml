@@ -1,0 +1,49 @@
+name: hatch-lint
+description: Run Linting with Hatch
+
+inputs:
+    env:
+        description: Hatch linting environment
+        default: lint
+    style_command:
+        description: Style Command to run
+        default: style
+    typing_command:
+        description: Typing Command to run
+        default: typing
+    shell:
+        description: Shell to use
+        default: bash
+
+runs:
+    using: composite
+    steps:
+        - name: Create Environment
+          run: hatch env create ${{ inputs.env }}
+          shell: ${{ inputs.shell }}
+        - name: Lint
+          id: lint
+          continue-on-error: true
+          run: |
+              echo "::add-matcher::${{ github.action_path }}/matchers/ruff.json"
+              hatch run ${{ inputs.env }}:${{ inputs.style_command }}
+              echo "::remove-matcher owner=ruff::"
+          shell: ${{ inputs.shell }}
+        - name: Type Checking
+          id: check
+          continue-on-error: true
+          run: |
+              echo "::add-matcher::${{ github.action_path }}/matchers/mypy.json"
+              hatch run ${{ inputs.env }}:${{ inputs.typing_command }}
+              echo "::remove-matcher owner=mypy::"
+          shell: ${{ inputs.shell }}
+        - name: Raise Errors For Failures
+          if: |
+              steps.lint.outcome != 'success' ||
+                steps.check.outcome != 'success'
+          run: |
+              echo "Linting and/or Typing failed"
+              echo "Lint: ${{ steps.lint.outcome }}"
+              echo "Check: ${{ steps.check.outcome }}"
+              exit 1
+          shell: ${{ inputs.shell }}
