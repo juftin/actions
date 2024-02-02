@@ -231,6 +231,7 @@ releasing of a package.
 -   `@semantic-release/changelog` - Generate a changelog file
 -   `semantic-release-gitmoji` - Use gitmoji for commit messages
 -   `semantic-release-major-tag` - Create a major tag for releases
+-   `semantic-release-replace-plugin` - Replace text in files with release information 
 
 You must also have a semantic-release configuration file in your repository
 root for this action to work.
