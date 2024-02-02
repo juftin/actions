@@ -1,0 +1,28 @@
+name: hatch-version
+description: extract package name + version from hatch
+
+runs:
+    using: composite
+    steps:
+        - name: Get Package Name
+          id: package-name
+          run: |
+              PACKAGE_NAME=$(hatch project metadata | jq -r .name)
+              echo "PACKAGE_NAME=$PACKAGE_NAME"
+              echo "name=$(echo $PACKAGE_NAME)" >> $GITHUB_OUTPUT
+          shell: bash
+        - name: Get Package Version
+          id: package-version
+          run: |
+              PACKAGE_VERSION=$(hatch version)
+              echo "PACKAGE_VERSION=$PACKAGE_VERSION"
+              echo "version=$(echo $PACKAGE_VERSION)" >> $GITHUB_OUTPUT
+          shell: bash
+
+outputs:
+    name:
+        description: "package name from hatch"
+        value: ${{ steps.package-name.outputs.name }}
+    version:
+        description: "package version from hatch"
+        value: ${{ steps.package-version.outputs.version }}
