@@ -1,0 +1,38 @@
+name: hatch-test
+description: Run Tests with Hatch
+
+inputs:
+    env:
+        description: Hatch testing environment
+        default: test
+        required: false
+    coverage_command:
+        description: Coverage Command to run
+        default: cov
+        required: false
+    shell:
+        description: Shell to use
+        default: bash
+        required: false
+    matrix:
+        description: Test matrix
+        required: false
+        default: ""
+
+runs:
+    using: composite
+    steps:
+        - name: Test Suite
+          if: ${{ inputs.matrix == '' }}
+          run: |
+              echo "::add-matcher::${{ github.action_path }}/matchers/pytest.json"
+              hatch run ${{ inputs.env }}:${{ inputs.coverage_command }}
+              echo "::remove-matcher owner=pytest::"
+          shell: ${{ inputs.shell }}
+        - name: Test Suite Matrix
+          if: ${{ inputs.matrix != '' }}
+          run: |
+              echo "::add-matcher::${{ github.action_path }}/matchers/pytest.json"
+              hatch run ${{ inputs.matrix }} ${{ inputs.env }}:${{ inputs.coverage_command }}
+              echo "::remove-matcher owner=pytest::"
+          shell: ${{ inputs.shell }}
