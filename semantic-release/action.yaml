@@ -14,15 +14,15 @@ runs:
           with:
               node-version: "lts/*"
         - name: Install dependencies
-          run: npm --prefix ${{ github.action_path }}/semantic_release/ clean-install
+          run: npm --prefix ${{ github.action_path }}/ clean-install
           shell: bash
         - name: Verify NPM Signatures
-          run: npm --prefix ${{ github.action_path }}/semantic_release/ audit signatures
+          run: npm --prefix ${{ github.action_path }}/ audit signatures
           shell: bash
         - name: Release
           shell: bash
           run: |
-              npx --prefix ${{ github.action_path }}/semantic_release/ semantic-release
+              npx --prefix ${{ github.action_path }}/ semantic-release
           env:
               GITHUB_TOKEN: ${{ inputs.github_token }}
               GIT_AUTHOR_NAME: github-actions[bot]
