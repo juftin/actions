@@ -15,8 +15,8 @@ conjunction with other actions and are not standalone.
 
 ## docker-build-push
 
-The `docker-build-push` action is a composite action that uses the `docker/build-push-action` to build
-and push a docker image to a registry.
+The `docker-build-push` action is a composite action that uses the `docker/build-push-action` to
+build and push a docker image to a registry.
 
 ### Inputs
 
@@ -220,18 +220,19 @@ releasing of a package.
 `semantic-release` comes with support for the following plugins
 (they must be specified in your release configuration file for them to work):
 
--   `@semantic-release/commit-analyzer` - Analyze commits with conventional-changelog (included by default)
--   `@semantic-release/release-notes-generator` - Generate release notes for the commits in the release (included by
-    default)
--   `@semantic-release/npm` - Publish a package to npm (included by default)
--   `@semantic-release/github` - Create a GitHub release + comment on issues and PRs (included by default)
-
--   `@semantic-release/git` - Commit release assets to the repository
--   `@semantic-release/exec` - Run commands during the release process
 -   `@semantic-release/changelog` - Generate a changelog file
+-   `@semantic-release/commit-analyzer` - Analyze commits with conventional-changelog
+-   `@semantic-release/exec` - Run commands during the release process
+-   `@semantic-release/git` - Commit release assets to the repository
+-   `@semantic-release/github` - Create a GitHub release + comment on issues and PRs
+-   `@semantic-release/npm` - Publish a package to npm
+-   `@semantic-release/release-notes-generator` - Generate release notes for the commits in the
+    release
 -   `semantic-release-gitmoji` - Use gitmoji for commit messages
 -   `semantic-release-major-tag` - Create a major tag for releases
--   `semantic-release-replace-plugin` - Replace text in files with release information 
+-   `semantic-release-pypi` - Publish a package to PyPI
+-   `semantic-release-replace-plugin` - Replace text in files with release information
+-   `semantic-release-slack-bot` - Notify a Slack channel of a release
 
 You must also have a semantic-release configuration file in your repository
 root for this action to work.
