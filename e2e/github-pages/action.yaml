@@ -6,6 +6,10 @@ inputs:
     description: Python Version to install
     required: true
     default: "3.11"
+outputs:
+  page_url:
+    description: "The URL of the published Github Pages"
+    value: ${{ steps.deployment.outputs.page_url }}
 runs:
   using: composite
   steps:
@@ -22,5 +26,3 @@ runs:
       id: deployment
       with:
         github_token: ${{ inputs.github_token }}
-outputs:
-  page_url: ${{ steps.deployment.outputs.page_url }}
