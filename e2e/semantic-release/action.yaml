@@ -1,0 +1,27 @@
+name: semantic-release
+description: GitHub Release using semantic-release + gitmoji
+
+inputs:
+  python_version:
+    description: Python Version to install
+    required: true
+    default: "3.11"
+  github_token:
+    description: GitHub Token
+    required: true
+    default: ${{ secrets.GITHUB_TOKEN }}
+runs:
+  using: composite
+  steps:
+    - name: Set up Github Workspace
+      uses: juftin/actions/checkout@v1
+      with:
+        fetch-depth: 2
+    - name: Setup Hatch
+      uses: juftin/actions/hatch-setup@v1
+      with:
+        python_version: ${{ inputs.python_version }}
+    - name: GitHub Release
+      uses: juftin/actions/semantic-release@v1
+      with:
+        github_token: ${{ inputs.github_token }}
