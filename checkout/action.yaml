@@ -1,0 +1,46 @@
+name: "Checkout"
+description: "Checkout a Git repository at a particular version"
+inputs:
+    repository:
+        description: "Repository name with owner. For example, actions/checkout"
+        default: ${{ github.repository }}
+    ref:
+        description: >
+            The branch, tag or SHA to checkout. When checking out the repository that
+            triggered a workflow, this defaults to the reference or SHA for that
+            event.  Otherwise, uses the default branch.
+        default: ${{ github.ref }}
+    token:
+        description: >
+            Personal access token (PAT) used to fetch the repository.
+        default: ${{ github.token }}
+    persist-credentials:
+        description: "Whether to configure the token or SSH key with the local git config"
+        default: true
+    path:
+        description: "Relative path under $GITHUB_WORKSPACE to place the repository"
+    fetch-depth:
+        description: "Number of commits to fetch. 0 indicates all history for all branches and tags."
+        default: 1
+    lfs:
+        description: "Whether to download Git-LFS files"
+        default: false
+    submodules:
+        description: >
+            Whether to checkout submodules: `true` to checkout submodules or `recursive` to
+            recursively checkout submodules.
+        default: false
+runs:
+    using: composite
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+              repository: ${{ inputs.repository }}
+              ref: ${{ inputs.ref }}
+              token: ${{ inputs.token }}
+              persist-credentials: ${{ inputs.persist-credentials }}
+              path: ${{ inputs.path }}
+              fetch-depth: ${{ inputs.fetch-depth }}
+              lfs: ${{ inputs.lfs }}
+              submodules: ${{ inputs.submodules }}
