@@ -17,9 +17,8 @@ jobs:
             issues: write
             pull-requests: write
         steps:
-            - name: Set up Github Workspace
+            - name: semantic-release
               uses: juftin/actions/e2e/semantic-release@v1
-
     github-pages-publish:
         runs-on: ubuntu-latest
         needs: release
@@ -31,14 +30,6 @@ jobs:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
         steps:
-            - name: Set up Github Workspace
-              uses: actions/checkout@v4
-            - name: Setup Hatch
-              uses: ./hatch-setup
-              with:
-                  python_version: "3.11"
-            - name: Build Docs
-              uses: ./hatch-docs
-            - name: Publish Docs
-              uses: ./github-pages
+            - name: github-pages
               id: deployment
+              uses: juftin/actions/e2e/github-pages@v1
