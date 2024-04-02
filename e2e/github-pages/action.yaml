@@ -1,0 +1,26 @@
+name: github-pages
+description: GitHub Pages Publishing using Hatch and MkDocs
+
+inputs:
+  python_version:
+    description: Python Version to install
+    required: true
+    default: "3.11"
+runs:
+  using: composite
+  steps:
+    - name: Set up Github Workspace
+      uses: juftin/actions/checkout@v1
+    - name: Setup Hatch
+      uses: juftin/actions/hatch-setup@v1
+      with:
+        python_version: ${{ inputs.python_version }}
+    - name: Build Docs
+      uses: juftin/actions/hatch-docs@v1
+    - name: Publish Docs
+      uses: juftin/actions/github-pages@v1
+      id: deployment
+      with:
+        github_token: ${{ inputs.github_token }}
+outputs:
+  page_url: ${{ steps.deployment.outputs.page_url }}
