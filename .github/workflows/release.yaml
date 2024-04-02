@@ -18,17 +18,7 @@ jobs:
             pull-requests: write
         steps:
             - name: Set up Github Workspace
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 2
-            - name: Setup Hatch
-              uses: ./hatch-setup
-              with:
-                  python_version: "3.11"
-            - name: GitHub Release
-              uses: ./semantic-release
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
+              uses: juftin/actions/e2e/semantic-release@v1
 
     github-pages-publish:
         runs-on: ubuntu-latest
