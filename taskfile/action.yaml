@@ -1,0 +1,143 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-action.json
+
+name: taskfile
+description: Installs Task and runs a Taskfile
+inputs:
+  task:
+    description: Task to run
+    required: true
+  args:
+    description: Arguments to pass to the task (.CLI_ARGS)
+    required: false
+    default: ""
+  setup-task:
+    description: Use setup-tasks action
+    required: false
+    default: "true"
+  task-version:
+    description: Version of Task to install
+    required: false
+    default: "3.x"
+  github-token:
+    description: GitHub token for setup-task
+    required: false
+    default: ""
+  install:
+    description: Run `install` task
+    required: false
+    default: "false"
+  setup-uv:
+    description: Use setup-uv action
+    required: false
+    default: "false"
+  uv-version:
+    description: Version of setup-uv action
+    required: false
+    default: "latest"
+  buildx:
+    description: Use buildx action
+    required: false
+    default: "false"
+  ecr:
+    description: Authenticate to ECR
+    required: false
+    default: "false"
+  checkout:
+    description: Checkout the repository
+    required: false
+    default: "false"
+  fetch-depth:
+    description: Fetch depth for checkout
+    required: false
+    default: "1"
+  ref:
+    description: Ref for checkout
+    required: false
+    default: "${{ github.ref }}"
+  annotations-ruff:
+    description: Enable Ruff PR Annotations
+    required: false
+    default: "false"
+  annotations-mypy:
+    description: Enable MyPy PR Annotations
+    required: false
+    default: "false"
+  annotations-pytest:
+    description: Enable pytest PR Annotations
+    required: false
+    default: "false"
+  pytest-coverage:
+    description: Report pytest coverage as a PR comment
+    required: false
+    default: "false"
+  pytest-coverage-xml:
+    description: Path to pytest coverage XML file
+    required: false
+    default: "coverage.xml"
+  pytest-coverage-junit:
+    description: Path to pytest coverage JUnit file
+    required: false
+    default: "pytest.xml"
+  task-args:
+    description: Additional arguments to pass to the task CLI
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: checkout
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        ref: ${{ inputs.ref }}
+    - name: setup-uv
+      if: ${{ inputs.setup-uv == 'true' }}
+      uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6.0.1
+      with:
+        version: ${{ inputs.uv-version }}
+    - name: setup-task
+      if: ${{ inputs.setup-task == 'true' }}
+      uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611 # v2.0.0
+      with:
+        version: ${{ inputs.task-version }}
+        repo-token: ${{ inputs.github-token }}
+    - name: buildx
+      if: ${{ inputs.buildx == 'true' }}
+      uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+    - name: task-install
+      if: ${{ inputs.install == 'true' }}
+      shell: bash
+      run: task install
+    - name: problem-matchers-enable
+      shell: bash
+      run: |
+        if [ "${{ inputs.annotations-mypy }}" == "true" ]; then
+          echo "::add-matcher::${{ github.action_path }}/problem-matchers/mypy.json"
+        elif [ "${{ inputs.annotations-pytest }}" == "true" ]; then
+          echo "::add-matcher::${{ github.action_path }}/problem-matchers/pytest.json"
+        fi
+    - name: task
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.args }}" ]; then
+          task ${{ inputs.task-args }} ${{ inputs.task }}
+        else
+          task ${{ inputs.task-args }} ${{ inputs.task }} -- ${{ inputs.args }}
+        fi
+      env:
+        RUFF_OUTPUT_FORMAT: ${{ inputs.annotations-ruff == 'true' && 'github' || 'full' }}
+    - name: pytest-coverage
+      if: ${{ inputs.pytest-coverage == 'true' }}
+      uses: MishaKav/pytest-coverage-comment@13d3c18e21895566c746187c9ea74736372e5e91 # v1.1.54
+      with:
+        pytest-xml-coverage-path: ${{ inputs.pytest-coverage-xml }}
+        junitxml-path: ${{ inputs.pytest-coverage-junit }}
+    - name: problem-matchers-disable
+      shell: bash
+      run: |
+        if [ "${{ inputs.annotations-mypy }}" == "true" ]; then
+          echo "::remove-matcher owner=mypy::"
+        elif [ "${{ inputs.annotations-pytest }}" == "true" ]; then
+          echo "::remove-matcher owner=pytest::"
+        fi
