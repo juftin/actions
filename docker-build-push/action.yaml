@@ -52,7 +52,7 @@ runs:
               password: ${{ inputs.password }}
         - name: Docker Image Building and Publishing
           if: ${{ !inputs.latest }}
-          uses: docker/build-push-action@v5
+          uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
           with:
               push: ${{ inputs.push }}
               tags: ${{ inputs.registry }}/${{ inputs.name }}:${{ inputs.version }}
@@ -60,7 +60,7 @@ runs:
               load: ${{ inputs.load }}
         - name: Docker Image Building and Publishing (latest)
           if: ${{ inputs.latest }}
-          uses: docker/build-push-action@v5
+          uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7
           with:
               push: ${{ inputs.push }}
               tags: ${{ inputs.registry }}/${{ inputs.name }}:${{ inputs.version }},${{ inputs.registry }}/${{ inputs.name }}:latest
