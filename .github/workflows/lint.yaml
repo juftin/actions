@@ -12,7 +12,7 @@ jobs:
             cancel-in-progress: true
         steps:
             - name: Set up Github Workspace
-              uses: actions/checkout@v4
+              uses: juftin/actions/checkout@v1
             - name: Setup Hatch
               uses: ./hatch-setup
               with:
