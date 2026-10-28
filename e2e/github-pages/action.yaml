@@ -14,15 +14,15 @@ runs:
   using: composite
   steps:
     - name: Set up Github Workspace
-      uses: juftin/actions/checkout@v1
+      uses: juftin/actions/checkout@5a54b64fe07d8de40f92676cae6b56c565ec28b2 # v1
     - name: Setup Hatch
-      uses: juftin/actions/hatch-setup@v1
+      uses: juftin/actions/hatch-setup@5a54b64fe07d8de40f92676cae6b56c565ec28b2 # v1
       with:
         python_version: ${{ inputs.python_version }}
     - name: Build Docs
-      uses: juftin/actions/hatch-docs@v1
+      uses: juftin/actions/hatch-docs@5a54b64fe07d8de40f92676cae6b56c565ec28b2 # v1
     - name: Publish Docs
-      uses: juftin/actions/github-pages@v1
+      uses: juftin/actions/github-pages@5a54b64fe07d8de40f92676cae6b56c565ec28b2 # v1
       id: deployment
       with:
         github_token: ${{ inputs.github_token }}
