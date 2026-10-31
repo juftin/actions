@@ -129,7 +129,7 @@ runs:
         RUFF_OUTPUT_FORMAT: ${{ inputs.annotations-ruff == 'true' && 'github' || 'full' }}
     - name: pytest-coverage
       if: ${{ inputs.pytest-coverage == 'true' }}
-      uses: MishaKav/pytest-coverage-comment@9ee59af31bd7bcada1cc496f086b407122602dbd # v1.12.3
+      uses: MishaKav/pytest-coverage-comment@93af7d8b7260ffe62dd0eb35bebd01c544f204e9 # v1.12.5
       with:
         pytest-xml-coverage-path: ${{ inputs.pytest-coverage-xml }}
         junitxml-path: ${{ inputs.pytest-coverage-junit }}
